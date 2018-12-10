@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './PetDetails.css';
 
 const PetDetails = (props) => {
+  console.log(props);
   const { name, location, about, species, images } = props.currentPet;
   return (
     <section className="pet-details">
