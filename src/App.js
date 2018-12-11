@@ -16,6 +16,8 @@ class App extends Component {
 
     this.state = {
       petList: pets,
+      filteredPetList: pets,
+      filteredList: undefined,
       currentPet: undefined,
     };
   }
@@ -51,19 +53,36 @@ class App extends Component {
     const idList = newPets.map(pet => pet.id);
     const getMaxId = () => {
       return Math.max(...idList);
-    }
+    };
     newPet.id = getMaxId() + 1;
     newPets.push(newPet);
     this.setState({
-      petList: newPets
+      filteredPetList: newPets
     });
   };
+
+  filterPets = (searchTerm) => {
+    const petRegex = new RegExp(searchTerm);
+    const newPets = this.state.petList.slice(0);
+    newPets.forEach((pet, i) => {
+      if (!petRegex.test(pet.about)) {
+        newPets.splice(i, 1);
+      }
+    });
+    this.setState({
+      filteredPetList: newPets
+    });
+    console.log(`Pet list: ${this.state.petList.length} => ${this.state.petList}`);
+      console.log(`Pet list: ${this.state.filteredPetList.length} => ${this.state.filteredPetList}`);
+  }
 
 
   render() {
     const { currentPet } = this.state;
 
     let selectedPet = currentPet ? <PetDetails currentPet={currentPet} /> : '';
+
+    let petList = this.state.filteredList ? this.state.petList : this.state.filteredPetList;
 
     return (
       <main className="App">
@@ -72,7 +91,8 @@ class App extends Component {
         </header>
         <section className="search-bar-wrapper">
           { /* Wave 4:  Place to add the SearchBar component */ }
-          <SearchBar />
+          <SearchBar
+            searchCallback={this.filterPets}/>
         </section>
           { /* Wave 2:  Where Pet Details should appear */ }
           { selectedPet }
@@ -81,7 +101,7 @@ class App extends Component {
         <section className="pet-list-wrapper">
           { /* Wave 1:  Where PetList should appear */ }
           <PetList
-            pets={this.state.petList}
+            pets={petList}
             onSelectPet={this.selectPet}
             onRemovePet={this.removePet}/>
         </section>

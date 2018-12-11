@@ -11,16 +11,26 @@ class SearchBar extends Component {
 
   }
 
+  onSearchInput = (event) => {
+    console.log(event.target.value);
+    this.props.searchCallback(event.target.value);
+  };
+
   render() {
     return (
-      <section>
+      <section className="search-bar">
+        <input
+          name="search"
+          placeholder="Filter Pets"
+          onChange={this.onSearchInput}
+          />
       </section>
     );
   }
 };
 
 SearchBar.propTypes = {
-  
+
 };
 
 export default SearchBar;
